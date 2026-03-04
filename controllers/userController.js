@@ -1,6 +1,9 @@
 import User from "../models/user.js";
 import bcrypyt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config()
 
 
 export function createUser(req, res) {
@@ -55,7 +58,7 @@ export function loginUser(req, res) {
                         isblocked: user.isBlocked,
                         isEmailVerified: user.isEmailVerified,
                         image: user.image
-                    }, "abc-123", )
+                    }, process.env.jwtSecret, )
                     res.json({
                         message: "Login successful",
                         token: token
@@ -68,4 +71,11 @@ export function loginUser(req, res) {
             }
         }
     )
+}
+
+export function isAdmin(req, res) {
+    if (req.user == null || req.user.role !== "admin") {
+        return false
+    }
+    return true
 }
